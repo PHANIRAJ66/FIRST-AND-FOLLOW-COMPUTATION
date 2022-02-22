@@ -1,0 +1,189 @@
+#include&lt;stdio.h&gt;
+#include&lt;string.h&gt;
+int i,j,l,m,n=0,o,p,nv,z=0,x=0;
+char str[10],temp,temp2[10],temp3[20],*ptr;
+struct prod
+{
+char lhs[10],rhs[10][10],ft[10],fol[10];
+int n;
+}pro[10];
+void findter()
+{
+int k,t;
+for(k=0;k&lt;n;k++)
+{
+if(temp==pro[k].lhs[0])
+{
+for(t=0;t&lt;pro[k].n;t++)
+{
+if( pro[k].rhs[t][0]&lt;65 || pro[k].rhs[t][0]&gt;90 )
+pro[i].ft[strlen(pro[i].ft)]=pro[k].rhs[t][0];
+else if( pro[k].rhs[t][0]&gt;=65 &amp;&amp; pro[k].rhs[t][0]&lt;=90 )
+{
+temp=pro[k].rhs[t][0];
+if(temp==&#39;S&#39;)
+pro[i].ft[strlen(pro[i].ft)]=&#39;#&#39;;
+
+findter();
+}
+}
+break;
+}
+}
+}
+void findfol()
+{
+int k,t,p1,o1,chk;
+char *ptr1;
+for(k=0;k&lt;n;k++)
+{
+chk=0;
+for(t=0;t&lt;pro[k].n;t++)
+{
+ptr1=strchr(pro[k].rhs[t],temp);
+if( ptr1 )
+{
+p1=ptr1-pro[k].rhs[t];
+if(pro[k].rhs[t][p1+1]&gt;=65 &amp;&amp; pro[k].rhs[t][p1+1]&lt;=90)
+{
+for(o1=0;o1&lt;n;o1++)
+if(pro[o1].lhs[0]==pro[k].rhs[t][p1+1])
+{
+strcat(pro[i].fol,pro[o1].ft);
+chk++;
+}
+}
+else if(pro[k].rhs[t][p1+1]==&#39;\0&#39;)
+{
+temp=pro[k].lhs[0];
+if(pro[l].rhs[j][p]==temp)
+continue;
+if(temp==&#39;S&#39;)
+strcat(pro[i].fol,&quot;$&quot;);
+
+findfol();
+chk++;
+}
+else
+{
+pro[i].fol[strlen(pro[i].fol)]=pro[k].rhs[t][p1+1];
+chk++;
+}
+}
+}
+if(chk&gt;0)
+break;
+}
+}
+int main()
+{
+FILE *f;
+//clrscr();
+for(i=0;i&lt;10;i++)
+pro[i].n=0;
+f=fopen(&quot;tab5.txt&quot;,&quot;r&quot;);
+while(!feof(f))
+{
+fscanf(f,&quot;%s&quot;,pro[n].lhs);
+if(n&gt;0)
+{
+if( strcmp(pro[n].lhs,pro[n-1].lhs) == 0 )
+{
+pro[n].lhs[0]=&#39;\0&#39;;
+fscanf(f,&quot;%s&quot;,pro[n-1].rhs[pro[n-1].n]);
+pro[n-1].n++;
+continue;
+}
+}
+
+fscanf(f,&quot;%s&quot;,pro[n].rhs[pro[n].n]);
+pro[n].n++;
+n++;
+}
+printf(&quot;\n\nTHE GRAMMAR IS AS FOLLOWS\n\n&quot;);
+for(i=0;i&lt;n;i++)
+for(j=0;j&lt;pro[i].n;j++)
+printf(&quot;%s -&gt; %s\n&quot;,pro[i].lhs,pro[i].rhs[j]);
+pro[0].ft[0]=&#39;#&#39;;
+for(i=0;i&lt;n;i++)
+{
+for(j=0;j&lt;pro[i].n;j++)
+{
+if( pro[i].rhs[j][0]&lt;65 || pro[i].rhs[j][0]&gt;90 )
+{
+pro[i].ft[strlen(pro[i].ft)]=pro[i].rhs[j][0];
+}
+else if( pro[i].rhs[j][0]&gt;=65 &amp;&amp; pro[i].rhs[j][0]&lt;=90 )
+{
+temp=pro[i].rhs[j][0];
+if(temp==&#39;S&#39;)
+pro[i].ft[strlen(pro[i].ft)]=&#39;#&#39;;
+findter();
+}
+}
+}
+printf(&quot;\n\nFIRST\n&quot;);
+for(i=0;i&lt;n;i++)
+{
+printf(&quot;\n%s -&gt; &quot;,pro[i].lhs);
+for(j=0;j&lt;strlen(pro[i].ft);j++)
+{
+
+for(l=j-1;l&gt;=0;l--)
+if(pro[i].ft[l]==pro[i].ft[j])
+break;
+if(l==-1)
+printf(&quot;%c&quot;,pro[i].ft[j]);
+}
+}
+for(i=0;i&lt;n;i++)
+temp2[i]=pro[i].lhs[0];
+pro[0].fol[0]=&#39;$&#39;;
+for(i=0;i&lt;n;i++)
+{
+for(l=0;l&lt;n;l++)
+{
+for(j=0;j&lt;pro[i].n;j++)
+{
+ptr=strchr(pro[l].rhs[j],temp2[i]);
+if( ptr )
+{
+p=ptr-pro[l].rhs[j];
+if(pro[l].rhs[j][p+1]&gt;=65 &amp;&amp; pro[l].rhs[j][p+1]&lt;=90)
+{
+for(o=0;o&lt;n;o++)
+if(pro[o].lhs[0]==pro[l].rhs[j][p+1])
+strcat(pro[i].fol,pro[o].ft);
+}
+else if(pro[l].rhs[j][p+1]==&#39;\0&#39;)
+{
+temp=pro[l].lhs[0];
+if(pro[l].rhs[j][p]==temp)
+continue;
+if(temp==&#39;S&#39;)
+strcat(pro[i].fol,&quot;$&quot;);
+
+findfol();
+}
+else
+pro[i].fol[strlen(pro[i].fol)]=pro[l].rhs[j][p+1];
+}
+}
+}
+}
+printf(&quot;\n\nFOLLOW\n&quot;);
+for(i=0;i&lt;n;i++)
+{
+printf(&quot;\n%s -&gt; &quot;,pro[i].lhs);
+for(j=0;j&lt;strlen(pro[i].fol);j++)
+{
+for(l=j-1;l&gt;=0;l--)
+if(pro[i].fol[l]==pro[i].fol[j])
+break;
+if(l==-1)
+printf(&quot;%c&quot;,pro[i].fol[j]);
+}
+}
+printf(&quot;\n&quot;);
+//getch();
+}
